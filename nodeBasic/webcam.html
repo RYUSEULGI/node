@@ -1,0 +1,44 @@
+<html>
+    <body>
+        <video autoplay></video>
+        <canvas id="canvas" width="16" height="16"></canvas>
+        <script language="javascript">
+            // initialise the WebCam - see https://developer.mozilla.org/en-US/docs/Web/API/Navigator.getUserMedia
+            if (navigator.webkitGetUserMedia != null) {
+                var options = { video: true, audio: false };
+                navigator.webkitGetUserMedia(
+                    options,
+                    function (stream) {
+                        const video = document.querySelector('video');
+                        video.src = window.webkitURL.createObjectURL(stream);
+                    },
+                    function (e) {
+                        console.log('error');
+                    }
+                );
+            }
+            setInterval(function () {
+                // find the video and canvas elements
+                const video = document.querySelector('video');
+                const canvas = document.getElementById('canvas');
+                const ctx = canvas.getContext('2d');
+
+                ctx.drawImage(video, 0, 0, 16, 16);
+                const data = ctx.getImageData(0, 0, 16, 16);
+                // Now build a string from the image data. There are better ways,
+                // but all we do here is for each pixel's red, green and blue values
+                // we store a character between A (char code 65) and P (char code 80)
+                var s = '';
+                for (n = 0; n < data.width * data.height; n++) {
+                    s += String.fromCharCode(65 + data.data[n * 4 + 2] / 16);
+                    s += String.fromCharCode(65 + data.data[n * 4] / 16);
+                    s += String.fromCharCode(65 + data.data[n * 4 + 1] / 16);
+                }
+                // finally send the data down HTTP, using the 'special' webpage '/set'
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.open('GET', '/set?rgb=' + s, false);
+                xmlHttp.send(null);
+            }, 5000);
+        </script>
+    </body>
+</html>
