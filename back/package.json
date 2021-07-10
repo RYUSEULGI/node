@@ -9,7 +9,9 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "back": "nodemon index.js",
+    "front": "yarn start --prefix front",
+    "dev": "concurrently \"npm run back\" \"npm run front\""
   },
   "author": "",
   "license": "ISC",

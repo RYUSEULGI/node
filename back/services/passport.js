@@ -16,13 +16,3 @@ passport.use(
         }
     )
 );
-// passport.use(
-//     new GithubStrategy(
-//         {
-//             clientID: keys.githubClientID,
-//             clientSecret: keys.githubClientSecret,
-//             callbackURL: '/auth/github/callback',
-//         },
-//         (token) => console.log(token)
-//     )
-// );
