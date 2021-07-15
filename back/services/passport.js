@@ -1,6 +1,10 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GithubStrategy = require('passport-github2').Strategy;
+const mongoose = require('mongoose');
 const keys = require('../config/keys');
+
+const User = mongoose.model('users');
 
 passport.use(
     new GoogleStrategy(
@@ -8,6 +12,19 @@ passport.use(
             clientID: keys.googleClientID,
             clientSecret: keys.googleClientSecret,
             callbackURL: '/auth/google/callback',
+        },
+        (accessToken, refreshToken, profile, done) => {
+            new User({ googleId: profile.id }).save();
+        }
+    )
+);
+
+passport.use(
+    new GithubStrategy(
+        {
+            clientID: keys.githubClientID,
+            clientSecret: keys.githubClientSecret,
+            callbackURL: '/auth/github/callback',
         },
         (accessToken, refreshToken, profile, done) => {
             console.log('access token', accessToken);
