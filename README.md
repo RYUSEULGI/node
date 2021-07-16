@@ -1,1 +1,1 @@
-사용기술 : node.js, react.js, redux, mongoDB, OAuth
+사용기술 : node.js, react.js, vanila redux, mongoDB, OAuth, MATERIAL-UI
